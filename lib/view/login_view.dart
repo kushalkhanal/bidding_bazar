@@ -1,3 +1,4 @@
+import 'package:bidding_bazar/view/dashboard_view.dart';
 import 'package:bidding_bazar/view/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +12,8 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,8 @@ class _LoginViewState extends State<LoginView> {
                   child: Column(
                     children: [
                       TextFormField(
+                        controller: _emailController,
+
                         decoration: InputDecoration(
                           hintText: "Enter your email",
                           labelText: "Username",
@@ -41,6 +46,7 @@ class _LoginViewState extends State<LoginView> {
                       TextFormField(
                         obscureText: true,
                         obscuringCharacter: "*",
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           hintText: "Password",
                           labelText: "Password",
@@ -64,7 +70,13 @@ class _LoginViewState extends State<LoginView> {
                         height: 75,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                           
+                            if (_emailController.text=="admin" &&_passwordController.text=="admin") {
+                             
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DashboardView()));
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFB3F39),
                           ),
@@ -78,7 +90,7 @@ class _LoginViewState extends State<LoginView> {
                       SizedBox(
                         height: 75,
                         width: double.infinity,
-                       child: OutlinedButton.icon(
+                        child: OutlinedButton.icon(
                           onPressed: () {},
                           icon: const FaIcon(
                             FontAwesomeIcons.google,

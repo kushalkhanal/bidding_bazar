@@ -1,4 +1,4 @@
-import 'package:bidding_bazar/view/login_view.dart';
+import 'package:bidding_bazar/view/splash_view.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -6,6 +6,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginView(), debugShowCheckedModeBanner: false);
+    return MaterialApp(home: SplashView(), debugShowCheckedModeBanner: false);
   }
 }
