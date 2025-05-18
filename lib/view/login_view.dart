@@ -16,16 +16,38 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _login() {
+    if (_formKey.currentState!.validate()) {
+      if (_emailController.text == "admin" && _passwordController.text == "admin") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardView()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Invalid username or password")),
+        );
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 Image.asset("assets/logo/bidding_logo.png", height: 150),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -42,16 +64,16 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Password is required';
+                            return 'Username is required';
                           }
                           return null;
                         },
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         obscuringCharacter: "*",
-                        controller: _passwordController,
                         decoration: InputDecoration(
                           hintText: "Password",
                           labelText: "Password",
@@ -67,49 +89,37 @@ class _LoginViewState extends State<LoginView> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           TextButton(
                             onPressed: () {},
-                            child: const Text("Forgot Password"),
+                            child: const Text("Forgot Password?"),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 10),
                       SizedBox(
-                        height: 75,
+                        height: 55,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_emailController.text == "admin" &&
-                                _passwordController.text == "admin") {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DashboardView(),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Invalid username or password"),
-                                ),
-                              );
-                            }
-                          },
+                          onPressed: _login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFB3F39),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                           child: const Text(
                             "Login",
-                            style: TextStyle(fontSize: 24, color: Colors.white),
+                            style: TextStyle(fontSize: 20, color: Colors.white),
                           ),
                         ),
                       ),
                       const SizedBox(height: 20),
                       SizedBox(
-                        height: 75,
+                        height: 55,
                         width: double.infinity,
                         child: OutlinedButton.icon(
                           onPressed: () {},
@@ -119,10 +129,11 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           label: const Text(
                             "Login with Google",
-                            style: TextStyle(fontSize: 18, color: Colors.black),
+                            style: TextStyle(fontSize: 16, color: Colors.black),
                           ),
                         ),
                       ),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -131,12 +142,10 @@ class _LoginViewState extends State<LoginView> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignupView(),
-                                ),
+                                MaterialPageRoute(builder: (context) => const SignupView()),
                               );
                             },
-                            child: const Text("SignUp"),
+                            child: const Text("Sign Up"),
                           ),
                         ],
                       ),
