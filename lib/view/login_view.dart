@@ -24,7 +24,7 @@ class _LoginViewState extends State<LoginView> {
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
-                Image.asset("assets/logo/bidding_logo.png", height: 120),
+                Image.asset("assets/logo/bidding_logo.png", height: 150),
                 const SizedBox(height: 20),
                 Form(
                   key: _formKey,
@@ -32,7 +32,6 @@ class _LoginViewState extends State<LoginView> {
                     children: [
                       TextFormField(
                         controller: _emailController,
-
                         decoration: InputDecoration(
                           hintText: "Enter your email",
                           labelText: "Username",
@@ -41,6 +40,12 @@ class _LoginViewState extends State<LoginView> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Password is required';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 30),
                       TextFormField(
@@ -55,6 +60,12 @@ class _LoginViewState extends State<LoginView> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Password is required';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 20),
                       Row(
@@ -71,10 +82,20 @@ class _LoginViewState extends State<LoginView> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                           
-                            if (_emailController.text=="admin" &&_passwordController.text=="admin") {
-                             
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DashboardView()));
+                            if (_emailController.text == "admin" &&
+                                _passwordController.text == "admin") {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DashboardView(),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Invalid username or password"),
+                                ),
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
