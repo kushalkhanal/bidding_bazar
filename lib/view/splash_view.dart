@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:bidding_bazar/view/login_view.dart'; // ✅ This is the correct import
+import 'package:bidding_bazar/view/login_view.dart'; 
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});

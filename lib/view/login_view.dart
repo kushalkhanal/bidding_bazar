@@ -91,7 +91,7 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       const SizedBox(height: 10),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
                             onPressed: () {},
@@ -145,7 +145,7 @@ class _LoginViewState extends State<LoginView> {
                                 MaterialPageRoute(builder: (context) => const SignupView()),
                               );
                             },
-                            child: const Text("Sign Up"),
+                            child: const Text("Sign Up",style: TextStyle(fontWeight :FontWeight.bold),),
                           ),
                         ],
                       ),
