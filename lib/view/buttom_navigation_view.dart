@@ -28,22 +28,10 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
   }
 
   static const List<BottomNavigationBarItem> _navItems = [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.dashboard), 
-      label: "Dashboard"
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.search), 
-      label: "Search"
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.favorite), 
-      label: "Favorites"
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person), 
-      label: "Profile"
-    ),
+    BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
+    BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
+    BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favorites"),
+    BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
   ];
 
   @override
@@ -54,13 +42,10 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        
+
         elevation: 1,
       ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -80,21 +65,16 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.grey,
           backgroundColor: Colors.white,
-          selectedIconTheme: const IconThemeData(
-            color: Colors.blue, 
-            size: 28
-          ),
+          selectedIconTheme: const IconThemeData(color: Colors.blue, size: 28),
           unselectedIconTheme: const IconThemeData(
-            color: Colors.grey, 
-            size: 24
+            color: Colors.grey,
+            size: 24,
           ),
           selectedLabelStyle: const TextStyle(
-            fontSize: 12.0, 
-            fontWeight: FontWeight.bold
+            fontSize: 12.0,
+            fontWeight: FontWeight.bold,
           ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 10.0
-          ),
+          unselectedLabelStyle: const TextStyle(fontSize: 10.0),
           showSelectedLabels: true,
           showUnselectedLabels: true,
           elevation: 0,
@@ -102,6 +82,4 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
       ),
     );
   }
-
-
 }
