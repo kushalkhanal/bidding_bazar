@@ -1,5 +1,5 @@
 import 'package:bidding_bazar/view/buttom_navigation_view.dart';
-import 'package:bidding_bazar/view/dashboard_view.dart';
+
 import 'package:bidding_bazar/view/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

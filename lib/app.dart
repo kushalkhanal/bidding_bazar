@@ -1,3 +1,4 @@
+import 'package:bidding_bazar/theme/theme.dart';
 import 'package:bidding_bazar/view/splash_view.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: SplashView(), debugShowCheckedModeBanner: false);
+    return MaterialApp(
+      home: SplashView(),
+      theme: biddingBazarTheme(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }

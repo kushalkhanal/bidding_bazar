@@ -54,6 +54,7 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        
         elevation: 1,
       ),
       body: IndexedStack(
@@ -64,7 +65,7 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey,
               spreadRadius: 1,
               blurRadius: 5,
               offset: const Offset(0, -3),

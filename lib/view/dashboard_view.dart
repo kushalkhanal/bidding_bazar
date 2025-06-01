@@ -78,7 +78,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Fixed the black screen issue
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -118,14 +118,19 @@ class _DashboardViewState extends State<DashboardView> {
                               if (loadingProgress == null) return child;
                               return const SizedBox(
                                 height: 120,
-                                child: Center(child: CircularProgressIndicator()),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                               );
                             },
-                            errorBuilder: (context, error, stackTrace) => Container(
-                              height: 120,
-                              color: Colors.grey[300],
-                              child: const Center(child: Icon(Icons.broken_image)),
-                            ),
+                            errorBuilder:
+                                (context, error, stackTrace) => Container(
+                                  height: 120,
+                                  color: Colors.grey[300],
+                                  child: const Center(
+                                    child: Icon(Icons.broken_image),
+                                  ),
+                                ),
                           ),
                         ),
                         Positioned(
@@ -165,7 +170,9 @@ class _DashboardViewState extends State<DashboardView> {
                           Text(
                             "Bid: \$${item.currentBid.toStringAsFixed(2)}",
                             style: const TextStyle(
-                                color: Colors.green, fontWeight: FontWeight.bold),
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -173,7 +180,9 @@ class _DashboardViewState extends State<DashboardView> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color:
-                                  timeLeft.inSeconds <= 0 ? Colors.red : Colors.black,
+                                  timeLeft.inSeconds <= 0
+                                      ? Colors.red
+                                      : Colors.black,
                             ),
                           ),
                         ],
