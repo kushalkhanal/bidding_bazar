@@ -1,3 +1,4 @@
+import 'package:bidding_bazar/view/buttom_navigation_view.dart';
 import 'package:bidding_bazar/view/dashboard_view.dart';
 import 'package:bidding_bazar/view/signup_view.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,11 @@ class _LoginViewState extends State<LoginView> {
 
   void _login() {
     if (_formKey.currentState!.validate()) {
-      if (_emailController.text == "admin" && _passwordController.text == "admin") {
+      if (_emailController.text == "admin" &&
+          _passwordController.text == "admin") {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const DashboardView()),
+          MaterialPageRoute(builder: (context) => const ButtonNavigation()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -142,10 +144,15 @@ class _LoginViewState extends State<LoginView> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const SignupView()),
+                                MaterialPageRoute(
+                                  builder: (context) => const SignupView(),
+                                ),
                               );
                             },
-                            child: const Text("Sign Up",style: TextStyle(fontWeight :FontWeight.bold),),
+                            child: const Text(
+                              "Sign Up",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       ),
