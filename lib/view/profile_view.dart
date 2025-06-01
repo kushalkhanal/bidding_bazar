@@ -56,10 +56,12 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           child: CircleAvatar(
                             radius: 56,
-                            backgroundImage: NetworkImage(
-                              'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400',
-                            ),
                             backgroundColor: Colors.grey[200],
+                            child: Icon(
+                              Icons.person,
+                              size: 60,
+                              color: Colors.grey[600],
+                            ),
                           ),
                         ),
                         Positioned(
@@ -162,7 +164,7 @@ class _ProfileViewState extends State<ProfileView> {
                   children: [
                     _buildMenuSection([
                       _buildMenuItem(
-                        Icons.person_outline,
+                        Icons.person,
                         'Edit Profile',
                         'Update your personal information',
                         () {},
@@ -185,7 +187,7 @@ class _ProfileViewState extends State<ProfileView> {
                     
                     _buildMenuSection([
                       _buildSwitchMenuItem(
-                        Icons.notifications_outline,
+                        Icons.notifications,
                         'Push Notifications',
                         'Get notified about auction updates',
                         notificationsEnabled,
@@ -196,7 +198,7 @@ class _ProfileViewState extends State<ProfileView> {
                         },
                       ),
                       _buildSwitchMenuItem(
-                        Icons.dark_mode_outlined,
+                        Icons.dark_mode,
                         'Dark Mode',
                         'Switch to dark theme',
                         darkModeEnabled,
@@ -212,13 +214,13 @@ class _ProfileViewState extends State<ProfileView> {
                     
                     _buildMenuSection([
                       _buildMenuItem(
-                        Icons.help_outline,
+                        Icons.help,
                         'Help & Support',
                         'Get help or contact support',
                         () {},
                       ),
                       _buildMenuItem(
-                        Icons.info_outline,
+                        Icons.info,
                         'About',
                         'App version and information',
                         () {},
