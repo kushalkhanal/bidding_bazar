@@ -4,14 +4,14 @@ import 'package:bidding_bazar/view/profile_view.dart';
 import 'package:bidding_bazar/view/search_view.dart';
 import 'package:flutter/material.dart';
 
-class ButtonNavigation extends StatefulWidget {
-  const ButtonNavigation({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<ButtonNavigation> createState() => _ButtonNavigationState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _ButtonNavigationState extends State<ButtonNavigation> {
+class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
   static final List<Widget> _pages = [

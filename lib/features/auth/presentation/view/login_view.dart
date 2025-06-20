@@ -1,6 +1,6 @@
-import 'package:bidding_bazar/view/buttom_navigation_view.dart';
+import 'package:bidding_bazar/view/home_view.dart';
 
-import 'package:bidding_bazar/view/signup_view.dart';
+import 'package:bidding_bazar/features/auth/presentation/view/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -29,7 +29,7 @@ class _LoginViewState extends State<LoginView> {
           _passwordController.text == "admin") {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ButtonNavigation()),
+          MaterialPageRoute(builder: (context) => const HomeView()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
