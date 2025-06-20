@@ -1,7 +1,7 @@
 import 'package:bidding_bazar/core/error/failure.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecase/login_user.dart';
-import '../../domain/usecase/signup_user.dart';
+import '../../domain/usecase/login_user_usecase.dart';
+import '../../domain/usecase/signup_user_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 

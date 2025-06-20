@@ -1,6 +1,6 @@
 // lib/main.dart
 
-import 'package:bidding_bazar/app/service_locator.dart' as di;
+import 'package:bidding_bazar/app/service_locator/service_locator.dart' as di;
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
