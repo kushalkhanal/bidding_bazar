@@ -1,9 +1,9 @@
-import 'dart:async';
+
 import 'package:bidding_bazar/features/splash/presentation/view_model/splash_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:bidding_bazar/features/auth/presentation/view/login_view.dart'; 
+
 
 class SplashView extends StatelessWidget {
   const SplashView({super.key});

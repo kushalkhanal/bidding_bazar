@@ -1,47 +1,74 @@
- import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_event.dart';
+// lib/features/auth/presentation/view/signup_view.dart
+
+import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_event.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignupView extends StatelessWidget {
-   SignupView({super.key});
-
- 
+  SignupView({super.key});
 
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
-
+  // --- Theme Colors ---
+  static const Color primaryColor = Color(0xFF4CAF50); // A vibrant, eco-friendly green
+  static const Color accentColor = Color(0xFF81C784);
+  static const Color backgroundColor = Color(0xFFF5F5F5);
+  static const Color textColor = Color(0xFF333333);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: textColor),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Image.asset("assets/logo/bidding_logo.png", height: 120),
-                const SizedBox(height: 20),
+                // --- Logo and Header ---
+                Image.asset("assets/logo/bidding_logo.png", height: 100),
+                const SizedBox(height: 16),
+                const Text(
+                  "Create Your Account",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
+                ),
+                const Text(
+                  "Join us to bid for a greener planet!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                ),
+                const SizedBox(height: 32),
+
+                // --- Form ---
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      TextFormField(
+                      _buildTextField(
                         controller: _nameController,
-                        decoration: InputDecoration(
-                          hintText: "Enter your name",
-                          labelText: "Name",
-                          labelStyle: const TextStyle(color: Colors.black26),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
+                        labelText: "Full Name",
+                        hintText: "Enter your full name",
+                        icon: Icons.person_outline,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "Name is required";
@@ -50,19 +77,12 @@ class SignupView extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 20),
-                     
-                      const SizedBox(height: 20),
-                      TextFormField(
+                      _buildTextField(
                         controller: _emailController,
+                        labelText: "Email Address",
+                        hintText: "Enter your email",
+                        icon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: "Enter your email",
-                          labelText: "Email",
-                          labelStyle: const TextStyle(color: Colors.black26),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "Email is required";
@@ -74,18 +94,12 @@ class SignupView extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 20),
-                      TextFormField(
+                      _buildTextField(
                         controller: _passwordController,
-                        obscureText: true,
-                        obscuringCharacter: "*",
-                        decoration: InputDecoration(
-                          hintText: "Create a password",
-                          labelText: "Password",
-                          labelStyle: const TextStyle(color: Colors.black26),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
+                        labelText: "Password",
+                        hintText: "Create a strong password",
+                        icon: Icons.lock_outline,
+                        isPassword: true,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "Password is required";
@@ -96,64 +110,82 @@ class SignupView extends StatelessWidget {
                           return null;
                         },
                       ),
-                     
-                      TextFormField(
+                      const SizedBox(height: 20),
+                      _buildTextField(
                         controller: _confirmPasswordController,
-                        obscureText: true,
-                        obscuringCharacter: "*",
-                        decoration: InputDecoration(
-                          hintText: "Re-enter the password",
-                          labelText: "Confirm Password",
-                          labelStyle: const TextStyle(color: Colors.black26),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
+                        labelText: "Confirm Password",
+                        hintText: "Re-enter the password",
+                        icon: Icons.lock_clock_outlined,
+                        isPassword: true,
                         validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Confirm Password is required';
-                    } else if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
-                    } else if (_confirmPasswordController.text !=
-                        _passwordController.text) {
-                      return 'Password and confirm password must be same.';
-                    }
-                    return null;
-                  },
+                          if (value == null || value.isEmpty) {
+                            return 'Confirm Password is required';
+                          }
+                          if (_confirmPasswordController.text != _passwordController.text) {
+                            return 'Passwords do not match.';
+                          }
+                          return null;
+                        },
                       ),
-                     
                       const SizedBox(height: 30),
+
+                      // --- Sign Up Button ---
                       SizedBox(
-                        height: 60,
+                        height: 55,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: (){
-                            context.read<SignupViewModel>().add(RegisterUserEvent(context: context, name: _nameController.text, email: _emailController.text, password: _passwordController.text, confirmPassword: _confirmPasswordController.text, onSuccess: (){
-                              _emailController.clear();
-                              _nameController.clear();
-                              _confirmPasswordController.clear();
-                              _passwordController.clear();
-                            }));
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<SignupViewModel>().add(
+                                    RegisterUserEvent(
+                                      context: context,
+                                      name: _nameController.text,
+                                      email: _emailController.text,
+                                      password: _passwordController.text,
+                                      confirmPassword: _confirmPasswordController.text,
+                                      onSuccess: () {
+                                        _emailController.clear();
+                                        _nameController.clear();
+                                        _confirmPasswordController.clear();
+                                        _passwordController.clear();
+                                      },
+                                    ),
+                                  );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFFB3F39),
+                            backgroundColor: primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                           child: const Text(
                             "Sign Up",
-                            style: TextStyle(fontSize: 24, color: Colors.white),
+                            style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
+
+                      // --- Login Redirect ---
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Already have an account?"),
+                          const Text(
+                            "Already have an account?",
+                            style: TextStyle(color: Colors.black54),
+                          ),
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context); // Goes back to LoginView
                             },
-                            child: const Text("Login"),
+                            child: const Text(
+                              "Login",
+                              style: TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -165,6 +197,43 @@ class SignupView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  // --- Helper Widget for TextFields to reduce code repetition ---
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    required String hintText,
+    required IconData icon,
+    bool isPassword = false,
+    TextInputType? keyboardType,
+    required String? Function(String?) validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: isPassword,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: labelText,
+        hintText: hintText,
+        prefixIcon: Icon(icon, color: primaryColor),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: primaryColor, width: 2.0),
+        ),
+      ),
+      validator: validator,
     );
   }
 }
