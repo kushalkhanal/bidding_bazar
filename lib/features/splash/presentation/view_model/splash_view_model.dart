@@ -1,3 +1,4 @@
+import 'package:bidding_bazar/app/service_locator/service_locator.dart';
 import 'package:bidding_bazar/features/auth/presentation/view/login_view.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:flutter/material.dart';

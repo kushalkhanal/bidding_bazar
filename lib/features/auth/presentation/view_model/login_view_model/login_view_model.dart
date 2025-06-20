@@ -1,3 +1,4 @@
+import 'package:bidding_bazar/app/service_locator/service_locator.dart';
 import 'package:bidding_bazar/core/common/snackbar/my_snackbar.dart';
 import 'package:bidding_bazar/features/auth/domain/usecase/login_user_usecase.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_event.dart';
@@ -44,14 +45,16 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     if (event.context.mounted) {
       Navigator.push(
         event.context,
-        MaterialPageRoute(
-          builder:
-          /// single bloc huna sakcha
-              (context) => BlocProvider.value(
-                value: serviceLocator<HomeViewModel>(),
-                child: HomeView(),
-              ),
-        ),
+        MaterialPageRoute(builder: (_) => HomeView()),
+        
+        // MaterialPageRoute(
+        //   builder:
+        //   /// single bloc huna sakcha
+        //       (context) => BlocProvider.value(
+        //         value: serviceLocator<HomeViewModel>(),
+        //         child: HomeView(),
+        //       ),
+        // ),
       );
     }
   }

@@ -1,43 +1,23 @@
+import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_event.dart';
+import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:bidding_bazar/view/home_view.dart';
 
 import 'package:bidding_bazar/features/auth/presentation/view/signup_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class LoginView extends StatelessWidget {
+   LoginView({super.key});
 
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
 
-class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
 
-  void _login() {
-    if (_formKey.currentState!.validate()) {
-      if (_emailController.text == "admin" &&
-          _passwordController.text == "admin") {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeView()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Invalid username or password")),
-        );
-      }
-    }
-  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +86,17 @@ class _LoginViewState extends State<LoginView> {
                         height: 55,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: _login,
+                          onPressed: (){
+                               if (_formKey.currentState!.validate()) {
+                          context.read<LoginViewModel>().add(
+                            LoginIntoSystemEvent(
+                              context: context,
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            ),
+                          );
+                        }
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFB3F39),
                             shape: RoundedRectangleBorder(
@@ -142,12 +132,12 @@ class _LoginViewState extends State<LoginView> {
                           const Text("Don't have an account?"),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignupView(),
-                                ),
-                              );
+                              context.read<LoginViewModel>().add(
+                            NavigateToSignupView(
+                              context: context,
+                              destination: SignupView(),
+                            ),
+                          );
                             },
                             child: const Text(
                               "Sign Up",
