@@ -30,7 +30,7 @@ class _DashboardViewState extends State<DashboardView> {
       id: "1",
       title: "Antique Vase",
       imageUrl:
-          "https://images.unsplash.com/photo-1695902047073-796e00ccd35f?q=80",
+          "https://images.unsplash.com/photo-1695902047073-796e00ccd35f?q=80&w=400", // Added width parameter for faster loading
       currentBid: 120.0,
       endTime: DateTime.now().add(const Duration(minutes: 5)),
     ),
@@ -38,7 +38,7 @@ class _DashboardViewState extends State<DashboardView> {
       id: "2",
       title: "Vintage Camera",
       imageUrl:
-          "https://images.unsplash.com/photo-1601854266103-c1dd42130633?q=80",
+          "https://images.unsplash.com/photo-1601854266103-c1dd42130633?q=80&w=400",
       currentBid: 80.0,
       endTime: DateTime.now().add(const Duration(minutes: 2, seconds: 30)),
     ),
@@ -46,7 +46,7 @@ class _DashboardViewState extends State<DashboardView> {
       id: "3",
       title: "Classic Watch",
       imageUrl:
-          "https://images.unsplash.com/photo-1726760239464-711b7de51384?q=80",
+          "https://images.unsplash.com/photo-1726760239464-711b7de51384?q=80&w=400",
       currentBid: 150.0,
       endTime: DateTime.now().add(const Duration(minutes: 10)),
     ),
@@ -54,7 +54,7 @@ class _DashboardViewState extends State<DashboardView> {
       id: "4",
       title: "Vintage Record Player",
       imageUrl:
-          "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80",
+          "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=400",
       currentBid: 200.0,
       endTime: DateTime.now().add(const Duration(minutes: 15)),
     ),
@@ -62,7 +62,7 @@ class _DashboardViewState extends State<DashboardView> {
       id: "5",
       title: "Classic Car Model",
       imageUrl:
-          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80",
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=400",
       currentBid: 350.0,
       endTime: DateTime.now().add(const Duration(minutes: 8)),
     ),
@@ -70,13 +70,14 @@ class _DashboardViewState extends State<DashboardView> {
       id: "6",
       title: "Rare Book Collection",
       imageUrl:
-          "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80",
+          "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=400",
       currentBid: 75.0,
       endTime: DateTime.now().add(const Duration(minutes: 12)),
     ),
   ];
 
   final Set<String> favoriteIds = {};
+  final Set<String> loadedImages = {}; // Track loaded images
   Timer? _timer;
 
   @override
@@ -175,7 +176,6 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    // Removed Scaffold - this was hiding the bottom navigation bar
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -220,20 +220,21 @@ class _DashboardViewState extends State<DashboardView> {
             // Grid Section
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 16), // Added bottom padding
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
                 child: GridView.builder(
                   itemCount: items.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
-                    childAspectRatio: 0.74, // Increased to 0.74 to make cards shorter
+                    childAspectRatio: 0.74,
                   ),
                   itemBuilder: (context, index) {
                     final item = items[index];
                     final timeLeft = item.endTime.difference(DateTime.now());
                     final isFav = favoriteIds.contains(item.id);
                     final isEnded = timeLeft.inSeconds <= 0;
+                    final isImageLoaded = loadedImages.contains(item.id);
 
                     return Card(
                       shape: RoundedRectangleBorder(
@@ -257,12 +258,75 @@ class _DashboardViewState extends State<DashboardView> {
                                     item.imageUrl,
                                     width: double.infinity,
                                     fit: BoxFit.cover,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
+                                    // Aggressive caching and faster loading
+                                    cacheWidth: 400, // Limit cache size for faster loading
+                                    cacheHeight: 300,
+                                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                                      if (wasSynchronouslyLoaded || frame != null) {
+                                        // Mark image as loaded and hide loading indicator immediately
+                                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                                          if (!loadedImages.contains(item.id)) {
+                                            setState(() {
+                                              loadedImages.add(item.id);
+                                            });
+                                          }
+                                        });
+                                        return child;
+                                      }
+                                      // Show minimal loading indicator for very short time
                                       return Container(
-                                        color: Colors.grey[200],
-                                        child: const Center(
-                                          child: CircularProgressIndicator(),
+                                        color: Colors.grey[100],
+                                        child: Center(
+                                          child: SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                Colors.grey[400]!,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        // Image loaded successfully
+                                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                                          if (!loadedImages.contains(item.id)) {
+                                            setState(() {
+                                              loadedImages.add(item.id);
+                                            });
+                                          }
+                                        });
+                                        return child;
+                                      }
+                                      
+                                      // Show loading only if significant progress is needed
+                                      final progress = loadingProgress.expectedTotalBytes != null
+                                          ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                          : null;
+                                      
+                                      // Hide loading indicator if progress > 30% or after short delay
+                                      if (progress != null && progress > 0.3) {
+                                        return child;
+                                      }
+                                      
+                                      return Container(
+                                        color: Colors.grey[100],
+                                        child: Center(
+                                          child: SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              value: progress,
+                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                Colors.grey[400]!,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       );
                                     },
@@ -344,51 +408,51 @@ class _DashboardViewState extends State<DashboardView> {
                           Expanded(
                             flex: 3,
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0), // Reduced from 10 to 8
+                              padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min, // Added this
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   // Title
                                   Text(
                                     item.title,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 13, // Reduced from 14 to 13
+                                      fontSize: 13,
                                       color: Colors.black87,
                                     ),
-                                    maxLines: 1, // Reduced from 2 to 1
+                                    maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 3), // Reduced from 4 to 3
+                                  const SizedBox(height: 3),
                                   
                                   // Current Bid
                                   Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, // Reduced from 8 to 6
-                                      vertical: 3, // Reduced from 4 to 3
+                                      horizontal: 6,
+                                      vertical: 3,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.green[50],
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
-                                      "\$${item.currentBid.toStringAsFixed(0)}", // Simplified text
+                                      "\$${item.currentBid.toStringAsFixed(0)}",
                                       style: TextStyle(
                                         color: Colors.green[700],
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 11, // Reduced from 12 to 11
+                                        fontSize: 11,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 3), // Reduced from 4 to 3
+                                  const SizedBox(height: 3),
                                   
                                   // Time Left
                                   Row(
                                     children: [
                                       Icon(
                                         Icons.timer,
-                                        size: 14, // Reduced from 16 to 14
+                                        size: 14,
                                         color: isEnded ? Colors.red : Colors.orange,
                                       ),
                                       const SizedBox(width: 4),
@@ -397,7 +461,7 @@ class _DashboardViewState extends State<DashboardView> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: isEnded ? Colors.red : Colors.orange[700],
-                                          fontSize: 11, // Reduced from 12 to 11
+                                          fontSize: 11,
                                         ),
                                       ),
                                     ],
@@ -407,7 +471,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   // Bid Now Button
                                   SizedBox(
                                     width: double.infinity,
-                                    height: 26, // Reduced from 28 to 26
+                                    height: 26,
                                     child: ElevatedButton(
                                       onPressed: isEnded ? null : () => _showBidDialog(item),
                                       style: ElevatedButton.styleFrom(
@@ -418,12 +482,12 @@ class _DashboardViewState extends State<DashboardView> {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                         elevation: isEnded ? 0 : 2,
-                                        padding: EdgeInsets.zero, // Added this
+                                        padding: EdgeInsets.zero,
                                       ),
                                       child: Text(
-                                        isEnded ? "Ended" : "Bid Now", // Shortened text
+                                        isEnded ? "Ended" : "Bid Now",
                                         style: const TextStyle(
-                                          fontSize: 11, // Reduced from 12 to 11
+                                          fontSize: 11,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
                                         ),
