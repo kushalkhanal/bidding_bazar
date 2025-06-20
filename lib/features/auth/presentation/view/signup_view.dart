@@ -1,38 +1,21 @@
- import 'package:flutter/material.dart';
+ import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_event.dart';
+import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignupView extends StatefulWidget {
-  const SignupView({super.key});
+class SignupView extends StatelessWidget {
+   SignupView({super.key});
 
-  @override
-  State<SignupView> createState() => _SignupViewState();
-}
+ 
 
-class _SignupViewState extends State<SignupView> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Perform signup logic here
-      print("First Name: ${_firstNameController.text}");
-      print("Last Name: ${_lastNameController.text}");
-      print("Email: ${_emailController.text}");
-      print("Password: ${_passwordController.text}");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +33,10 @@ class _SignupViewState extends State<SignupView> {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: _firstNameController,
+                        controller: _nameController,
                         decoration: InputDecoration(
-                          hintText: "Enter your first name",
-                          labelText: "First Name",
+                          hintText: "Enter your name",
+                          labelText: "Name",
                           labelStyle: const TextStyle(color: Colors.black26),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -61,29 +44,13 @@ class _SignupViewState extends State<SignupView> {
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return "First name is required";
+                            return "Name is required";
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _lastNameController,
-                        decoration: InputDecoration(
-                          hintText: "Enter your last name",
-                          labelText: "Last Name",
-                          labelStyle: const TextStyle(color: Colors.black26),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "Last name is required";
-                          }
-                          return null;
-                        },
-                      ),
+                     
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: _emailController,
@@ -129,12 +96,45 @@ class _SignupViewState extends State<SignupView> {
                           return null;
                         },
                       ),
+                     
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        obscureText: true,
+                        obscuringCharacter: "*",
+                        decoration: InputDecoration(
+                          hintText: "Re-enter the password",
+                          labelText: "Confirm Password",
+                          labelStyle: const TextStyle(color: Colors.black26),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Confirm Password is required';
+                    } else if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    } else if (_confirmPasswordController.text !=
+                        _passwordController.text) {
+                      return 'Password and confirm password must be same.';
+                    }
+                    return null;
+                  },
+                      ),
+                     
                       const SizedBox(height: 30),
                       SizedBox(
                         height: 60,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: _submitForm,
+                          onPressed: (){
+                            context.read<SignupViewModel>().add(RegisterUserEvent(context: context, name: _nameController.text, email: _emailController.text, password: _passwordController.text, confirmPassword: _confirmPasswordController.text, onSuccess: (){
+                              _emailController.clear();
+                              _nameController.clear();
+                              _confirmPasswordController.clear();
+                              _passwordController.clear();
+                            }));
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFB3F39),
                           ),
