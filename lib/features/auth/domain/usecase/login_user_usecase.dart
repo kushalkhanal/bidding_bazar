@@ -1,6 +1,6 @@
 import 'package:bidding_bazar/app/usecase/usecase.dart';
 import 'package:bidding_bazar/core/error/failure.dart';
-import 'package:bidding_bazar/features/auth/data/repository/user_repository.dart';
+import 'package:bidding_bazar/features/auth/domain/repository/user_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
