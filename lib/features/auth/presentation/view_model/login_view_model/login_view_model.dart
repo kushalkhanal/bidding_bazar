@@ -2,6 +2,7 @@ import 'package:bidding_bazar/core/common/snackbar/my_snackbar.dart';
 import 'package:bidding_bazar/features/auth/domain/usecase/login_user_usecase.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_event.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_state.dart';
+import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart';
 import 'package:bidding_bazar/view/home_view.dart';
 import 'package:bidding_bazar/features/auth/presentation/view/signup_view.dart';
 import 'package:flutter/material.dart';
