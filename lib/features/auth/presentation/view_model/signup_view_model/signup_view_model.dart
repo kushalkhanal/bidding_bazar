@@ -1,3 +1,5 @@
+// lib/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart
+
 import 'package:bidding_bazar/core/common/snackbar/my_snackbar.dart';
 import 'package:bidding_bazar/features/auth/domain/usecase/signup_user_usecase.dart';
 import 'package:bidding_bazar/features/auth/presentation/view/login_view.dart';
@@ -5,7 +7,6 @@ import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_
 import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class SignupViewModel extends Bloc<SignupEvent, SignupState> {
   final UserRegisterUsecase _userRegisterUsecase;
@@ -30,14 +31,15 @@ class SignupViewModel extends Bloc<SignupEvent, SignupState> {
   }
 
   void _onShowHidePassword(ShowHidePassword event, Emitter<SignupState> emit) {
-    emit(state.copyWith(isPasswordVisible: event.isVisible));
+    emit(state.copyWith(isPasswordVisible: !state.isPasswordVisible));
   }
 
   void _onShowHideConfirmPassword(
     ShowHideConfirmPassword event,
     Emitter<SignupState> emit,
   ) {
-    emit(state.copyWith(isConfirmPasswordVisible: event.isVisible));
+    emit(state.copyWith(
+        isConfirmPasswordVisible: !state.isConfirmPasswordVisible));
   }
 
   Future<void> _onRegisterUser(
@@ -48,8 +50,10 @@ class SignupViewModel extends Bloc<SignupEvent, SignupState> {
 
     final result = await _userRegisterUsecase(
       RegisterUserParams(
-        name: event.name,
+        username: event.username,
         email: event.email,
+        firstName: event.firstName,
+        lastName: event.lastName,
         password: event.password,
       ),
     );
@@ -69,7 +73,9 @@ class SignupViewModel extends Bloc<SignupEvent, SignupState> {
           context: event.context,
           message: "Registration Successful",
         );
-        event.onSuccess();
+        event.onSuccess(
+          
+        );
       },
     );
   }

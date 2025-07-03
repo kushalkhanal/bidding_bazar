@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+// lib/features/auth/presentation/view_model/signup_view_model/signup_event.dart
+
+
+import 'package:flutter/widgets.dart';
 
 @immutable
 sealed class SignupEvent {}
@@ -12,18 +15,20 @@ class NavigateToLoginView extends SignupEvent {
 
 class RegisterUserEvent extends SignupEvent {
   final BuildContext context;
-  final String name;
+  final String username;
   final String email;
+  final String firstName;
+  final String lastName;
   final String password;
-  final String confirmPassword;
   final VoidCallback onSuccess;
 
   RegisterUserEvent({
     required this.context,
-    required this.name,
+    required this.username,
     required this.email,
+    required this.firstName,
+    required this.lastName,
     required this.password,
-    required this.confirmPassword,
     required this.onSuccess,
   });
 }

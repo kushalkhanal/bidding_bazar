@@ -9,13 +9,17 @@ class SignupView extends StatelessWidget {
   SignupView({super.key});
 
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _fnameController = TextEditingController();
+  final TextEditingController _lnameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   // --- Theme Colors ---
-  static const Color primaryColor = Color(0xFF4CAF50); // A vibrant, eco-friendly green
+  static const Color primaryColor =
+      Color(0xFF4CAF50); // A vibrant, eco-friendly green
   static const Color accentColor = Color(0xFF81C784);
   static const Color backgroundColor = Color(0xFFF5F5F5);
   static const Color textColor = Color(0xFF333333);
@@ -65,8 +69,8 @@ class SignupView extends StatelessWidget {
                   child: Column(
                     children: [
                       _buildTextField(
-                        controller: _nameController,
-                        labelText: "Full Name",
+                        controller: _usernameController,
+                        labelText: "Username",
                         hintText: "Enter your full name",
                         icon: Icons.person_outline,
                         validator: (value) {
@@ -77,6 +81,33 @@ class SignupView extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 20),
+                      _buildTextField(
+                        controller: _fnameController,
+                        labelText: "First Name",
+                        hintText: "Enter your first name",
+                        icon: Icons.person_outline,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Name is required";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTextField(
+                        controller: _lnameController,
+                        labelText: "Last Name",
+                        hintText: "Enter your last name",
+                        icon: Icons.person_outline,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Name is required";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+
                       _buildTextField(
                         controller: _emailController,
                         labelText: "Email Address",
@@ -121,7 +152,8 @@ class SignupView extends StatelessWidget {
                           if (value == null || value.isEmpty) {
                             return 'Confirm Password is required';
                           }
-                          if (_confirmPasswordController.text != _passwordController.text) {
+                          if (_confirmPasswordController.text !=
+                              _passwordController.text) {
                             return 'Passwords do not match.';
                           }
                           return null;
@@ -136,16 +168,20 @@ class SignupView extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                            
                               context.read<SignupViewModel>().add(
                                     RegisterUserEvent(
                                       context: context,
-                                      name: _nameController.text,
-                                      email: _emailController.text,
+                                      username: _usernameController.text, // Or derive as needed
+                                      email: _emailController.text.trim(),
+                                      firstName: _fnameController.text,
+                                      lastName: _lnameController.text,
                                       password: _passwordController.text,
-                                      confirmPassword: _confirmPasswordController.text,
                                       onSuccess: () {
                                         _emailController.clear();
-                                        _nameController.clear();
+                                        _fnameController.clear();
+                                        _lnameController.clear();
+                                        _usernameController.clear();
                                         _confirmPasswordController.clear();
                                         _passwordController.clear();
                                       },
@@ -161,7 +197,10 @@ class SignupView extends StatelessWidget {
                           ),
                           child: const Text(
                             "Sign Up",
-                            style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),

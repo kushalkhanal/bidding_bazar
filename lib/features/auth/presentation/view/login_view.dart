@@ -2,6 +2,7 @@
 
 import 'package:bidding_bazar/features/auth/presentation/view/signup_view.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_event.dart';
+import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_state.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,9 +15,8 @@ class LoginView extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // --- Theme Colors (Consistent with Signup View) ---
-  static const Color primaryColor = Color(0xFF4CAF50); // A vibrant, eco-friendly green
-  static const Color accentColor = Color(0xFF81C784);
+  // --- Theme Colors ---
+  static const Color primaryColor = Color(0xFF4CAF50);
   static const Color backgroundColor = Color(0xFFF5F5F5);
   static const Color textColor = Color(0xFF333333);
 
@@ -60,20 +60,10 @@ class LoginView extends StatelessWidget {
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: _inputDecoration(
                           labelText: "Email",
                           hintText: "Enter your email",
-                          prefixIcon: const Icon(Icons.email_outlined, color: primaryColor),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.grey.shade300)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: primaryColor, width: 2.0)),
+                          icon: Icons.email_outlined,
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -87,30 +77,37 @@ class LoginView extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
 
-                      // --- Password TextField ---
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: "Password",
-                          hintText: "Enter your password",
-                          prefixIcon: const Icon(Icons.lock_outline, color: primaryColor),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.grey.shade300)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: primaryColor, width: 2.0)),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Password is required';
-                          }
-                          return null;
+                      // --- Password TextField with BlocBuilder ---
+                      BlocBuilder<LoginViewModel, LoginState>(
+                        builder: (context, state) {
+                          return TextFormField(
+                            controller: _passwordController,
+                            obscureText: !state.isPasswordVisible,
+                            decoration: _inputDecoration(
+                              labelText: "Password",
+                              hintText: "Enter your password",
+                              icon: Icons.lock_outline,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  state.isPasswordVisible
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: primaryColor,
+                                ),
+                                onPressed: () {
+                                  context
+                                      .read<LoginViewModel>()
+                                      .add(TogglePasswordVisibility());
+                                },
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Password is required';
+                              }
+                              return null;
+                            },
+                          );
                         },
                       ),
                       const SizedBox(height: 10),
@@ -120,11 +117,13 @@ class LoginView extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                           
+                            // TODO: Implement Forgot Password
                           },
                           child: const Text(
                             "Forgot Password?",
-                            style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -140,7 +139,7 @@ class LoginView extends StatelessWidget {
                               context.read<LoginViewModel>().add(
                                     LoginIntoSystemEvent(
                                       context: context,
-                                      email: _emailController.text,
+                                      email: _emailController.text.trim(),
                                       password: _passwordController.text,
                                     ),
                                   );
@@ -148,79 +147,114 @@ class LoginView extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryColor,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                           child: const Text(
                             "Login",
-                            style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // --- OR Divider ---
-                      const Row(
-                        children: [
-                          Expanded(child: Divider(thickness: 1)),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: Text("OR", style: TextStyle(color: Colors.black45)),
-                          ),
-                          Expanded(child: Divider(thickness: 1)),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-
-                      // --- Google Login Button ---
-                      SizedBox(
-                        height: 55,
-                        width: double.infinity,
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            // TODO: Implement Google Sign-In
-                          },
-                          icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
-                          label: const Text(
-                            "Continue with Google",
                             style: TextStyle(
-                                fontSize: 16, color: textColor, fontWeight: FontWeight.w600),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Colors.grey.shade400),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // --- Signup Redirect ---
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Don't have an account?",
-                              style: TextStyle(color: Colors.black54)),
-                          TextButton(
-                            onPressed: () {
-                              context.read<LoginViewModel>().add(
-                                    NavigateToSignupView(
-                                      context: context,
-                                      destination: SignupView(),
-                                    ),
-                                  );
-                            },
-                            child: const Text(
-                              "Sign Up",
-                              style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 20),
+
+                // --- OR Divider ---
+                const Row(
+                  children: [
+                    Expanded(child: Divider(thickness: 1)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text("OR", style: TextStyle(color: Colors.black45)),
+                    ),
+                    Expanded(child: Divider(thickness: 1)),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // --- Google Login Button ---
+                _buildGoogleLoginButton(context),
+                const SizedBox(height: 24),
+
+                // --- Signup Redirect ---
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account?",
+                        style: TextStyle(color: Colors.black54)),
+                    TextButton(
+                      onPressed: () {
+                        context.read<LoginViewModel>().add(
+                              NavigateToSignupView(
+                                context: context,
+                                destination: SignupView(),
+                              ),
+                            );
+                      },
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                            color: primaryColor, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  // Helper method for consistent input decoration
+  InputDecoration _inputDecoration(
+      {required String labelText,
+      required String hintText,
+      required IconData icon,
+      Widget? suffixIcon}) {
+    return InputDecoration(
+      labelText: labelText,
+      hintText: hintText,
+      prefixIcon: Icon(icon, color: primaryColor),
+      suffixIcon: suffixIcon,
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: primaryColor, width: 2.0)),
+    );
+  }
+
+  // Helper widget for Google Login Button
+  Widget _buildGoogleLoginButton(BuildContext context) {
+    return SizedBox(
+      height: 55,
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: () {
+          // TODO: Implement Google Sign-In
+        },
+        icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
+        label: const Text(
+          "Continue with Google",
+          style: TextStyle(
+              fontSize: 16, color: textColor, fontWeight: FontWeight.w600),
+        ),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: Colors.grey.shade400),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );

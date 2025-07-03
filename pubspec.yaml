@@ -57,6 +57,14 @@ dependencies:
   json_serializable: 6.9.0
   get_it: ^8.0.3
   flutter_bloc: ^9.1.1
+  flutter_launcher_icons: ^0.14.4
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/bidding_logo.png"
+
+
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+// lib/features/auth/presentation/view_model/login_view_model/login_event.dart
+
 import 'package:flutter/material.dart';
 
 @immutable
@@ -9,16 +11,6 @@ class NavigateToSignupView extends LoginEvent {
 
   NavigateToSignupView({required this.context, required this.destination});
 }
-
-// class NavigateToForgotPasswordView extends LoginEvent {
-//   final BuildContext context;
-//   final Widget destination;
-
-//   NavigateToForgotPasswordView({
-//     required this.context,
-//     required this.destination,
-//   });
-// }
 
 class NavigateToHomeView extends LoginEvent {
   final BuildContext context;
@@ -39,9 +31,5 @@ class LoginIntoSystemEvent extends LoginEvent {
   });
 }
 
-class ShowHidePassword extends LoginEvent {
-  final BuildContext context;
-  final bool isVisible;
-
-  ShowHidePassword({required this.context, required this.isVisible});
-}
+// Simplified event for toggling password visibility
+class TogglePasswordVisibility extends LoginEvent {}
