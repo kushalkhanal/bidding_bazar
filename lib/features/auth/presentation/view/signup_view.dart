@@ -75,7 +75,7 @@ class SignupView extends StatelessWidget {
                         icon: Icons.person_outline,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return "Name is required";
+                            return "Username is required";
                           }
                           return null;
                         },
@@ -88,7 +88,7 @@ class SignupView extends StatelessWidget {
                         icon: Icons.person_outline,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return "Name is required";
+                            return "First name is required";
                           }
                           return null;
                         },
@@ -101,7 +101,7 @@ class SignupView extends StatelessWidget {
                         icon: Icons.person_outline,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return "Name is required";
+                            return "Last name is required";
                           }
                           return null;
                         },
