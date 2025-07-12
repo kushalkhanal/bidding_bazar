@@ -45,7 +45,7 @@ Future<void> _initApiServices()async{
 
 Future _initLoginModule() async {
   serviceLocator.registerFactory(
-    () => UserLoginUsecase(repository: serviceLocator<UserRemoteRepositoryImpl>()),
+    () => UserLoginUsecase(repository: serviceLocator<UserRemoteRepositoryImpl>(),tokenSharedPrefs: serviceLocator<TokenSharedPrefs>()),
   );
 
   serviceLocator.registerFactory(

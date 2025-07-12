@@ -117,7 +117,7 @@ class LoginView extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            // TODO: Implement Forgot Password
+                            //  Implement Forgot Password
                           },
                           child: const Text(
                             "Forgot Password?",
