@@ -1,4 +1,6 @@
-class SignupState {
+import 'package:equatable/equatable.dart';
+
+class SignupState extends Equatable {
   final bool isLoading;
   final bool isSuccess;
   final bool isPasswordVisible;
@@ -30,4 +32,7 @@ class SignupState {
           isConfirmPasswordVisible ?? this.isConfirmPasswordVisible,
     );
   }
+  
+  @override
+  List<Object?> get props => [isLoading,isSuccess,isPasswordVisible,isConfirmPasswordVisible];
 }
