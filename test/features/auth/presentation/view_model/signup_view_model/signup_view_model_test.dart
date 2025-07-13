@@ -1,4 +1,3 @@
-import 'package:bidding_bazar/core/error/failure.dart';
 import 'package:bidding_bazar/features/auth/domain/usecase/signup_user_usecase.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_event.dart';
 import 'package:bidding_bazar/features/auth/presentation/view_model/signup_view_model/signup_state.dart';
