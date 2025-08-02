@@ -15,7 +15,7 @@ class NavigateToLoginView extends SignupEvent {
 
 class RegisterUserEvent extends SignupEvent {
   final BuildContext context;
-  final String username;
+  final String number;
   final String email;
   final String firstName;
   final String lastName;
@@ -24,7 +24,7 @@ class RegisterUserEvent extends SignupEvent {
 
   RegisterUserEvent({
     required this.context,
-    required this.username,
+    required this.number,
     required this.email,
     required this.firstName,
     required this.lastName,

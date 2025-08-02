@@ -1,7 +1,7 @@
-// lib/core/error/exceptions.dart
+// lib/core/error/exception.dart
+class ServerException implements Exception {
+  final String message;
+  ServerException(this.message);
+}
 
-// Thrown when an error occurs during an API call.
-class ServerException implements Exception {}
-
-// Thrown when an error occurs with the local cache (Hive).
 class CacheException implements Exception {}

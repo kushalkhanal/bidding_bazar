@@ -172,7 +172,7 @@ class SignupView extends StatelessWidget {
                               context.read<SignupViewModel>().add(
                                     RegisterUserEvent(
                                       context: context,
-                                      username: _usernameController.text, // Or derive as needed
+                                      number: _usernameController.text, // Or derive as needed
                                       email: _emailController.text.trim(),
                                       firstName: _fnameController.text,
                                       lastName: _lnameController.text,

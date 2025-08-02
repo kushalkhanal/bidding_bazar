@@ -1,32 +1,43 @@
+import 'package:bidding_bazar/features/auth/domain/entity/login_response_entity.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class LoginState extends Equatable {
   final bool isLoading;
-  final bool isSuccess;
   final bool isPasswordVisible;
+  final String? errorMessage; // To hold the error message
+  final LoginResponseEntity? loginResponse; // To hold the user on success
 
- const LoginState({
-    required this.isLoading,
-    required this.isSuccess,
-    required this.isPasswordVisible,
+  const LoginState({
+    this.isLoading = false,
+    this.isPasswordVisible = false,
+    this.errorMessage,
+    this.loginResponse,
   });
- const LoginState.initial()
-    : isLoading = false,
-      isSuccess = false,
-      isPasswordVisible = false;
+
+  const LoginState.initial() : this();
 
   LoginState copyWith({
     bool? isLoading,
-    bool? isSuccess,
     bool? isPasswordVisible,
+    String? errorMessage,
+    LoginResponseEntity? loginResponse,
   }) {
     return LoginState(
       isLoading: isLoading ?? this.isLoading,
-      isSuccess: isSuccess ?? this.isSuccess,
       isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
+      // Allow setting error/user to null to clear them
+      errorMessage: errorMessage,
+      loginResponse: loginResponse,
     );
   }
-  
+
   @override
-  List<Object?> get props => [isLoading,isSuccess,isPasswordVisible];
+  List<Object?> get props => [
+    isLoading,
+    isPasswordVisible,
+    errorMessage,
+    loginResponse,
+  ];
 }

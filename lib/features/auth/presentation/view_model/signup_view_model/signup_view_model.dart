@@ -1,5 +1,3 @@
-// lib/features/auth/presentation/view_model/signup_view_model/signup_view_model.dart
-
 import 'package:bidding_bazar/core/common/snackbar/my_snackbar.dart';
 import 'package:bidding_bazar/features/auth/domain/usecase/signup_user_usecase.dart';
 import 'package:bidding_bazar/features/auth/presentation/view/login_view.dart';
@@ -9,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignupViewModel extends Bloc<SignupEvent, SignupState> {
-  final UserRegisterUsecase _userRegisterUsecase;
+  final SignupUserUsecase _userRegisterUsecase;
 
   SignupViewModel(this._userRegisterUsecase) : super(SignupState.initial()) {
     on<NavigateToLoginView>(_onNavigateToLoginView);
@@ -38,8 +36,9 @@ class SignupViewModel extends Bloc<SignupEvent, SignupState> {
     ShowHideConfirmPassword event,
     Emitter<SignupState> emit,
   ) {
-    emit(state.copyWith(
-        isConfirmPasswordVisible: !state.isConfirmPasswordVisible));
+    emit(
+      state.copyWith(isConfirmPasswordVisible: !state.isConfirmPasswordVisible),
+    );
   }
 
   Future<void> _onRegisterUser(
@@ -49,8 +48,8 @@ class SignupViewModel extends Bloc<SignupEvent, SignupState> {
     emit(state.copyWith(isLoading: true));
 
     final result = await _userRegisterUsecase(
-      RegisterUserParams(
-        username: event.username,
+      RegisterParams(
+        number: event.number,
         email: event.email,
         firstName: event.firstName,
         lastName: event.lastName,
@@ -73,9 +72,7 @@ class SignupViewModel extends Bloc<SignupEvent, SignupState> {
           context: event.context,
           message: "Registration Successful",
         );
-        event.onSuccess(
-          
-        );
+        event.onSuccess();
       },
     );
   }

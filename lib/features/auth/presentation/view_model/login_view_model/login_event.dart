@@ -1,35 +1,20 @@
-// lib/features/auth/presentation/view_model/login_view_model/login_event.dart
-
 import 'package:flutter/material.dart';
 
 @immutable
 sealed class LoginEvent {}
 
-class NavigateToSignupView extends LoginEvent {
-  final BuildContext context;
-  final Widget destination;
-
-  NavigateToSignupView({required this.context, required this.destination});
-}
-
-class NavigateToHomeView extends LoginEvent {
-  final BuildContext context;
-  final Widget destination;
-
-  NavigateToHomeView({required this.context, required this.destination});
-}
-
-class LoginIntoSystemEvent extends LoginEvent {
-  final BuildContext context;
+// Renamed for clarity: This event is triggered when the button is pressed.
+class LoginButtonPressedEvent extends LoginEvent {
   final String email;
   final String password;
 
-  LoginIntoSystemEvent({
-    required this.context,
+  LoginButtonPressedEvent({
     required this.email,
     required this.password,
   });
 }
 
-// Simplified event for toggling password visibility
 class TogglePasswordVisibility extends LoginEvent {}
+
+// Navigation events are an anti-pattern in BLoC.
+// We will handle navigation in the View using BlocListener.

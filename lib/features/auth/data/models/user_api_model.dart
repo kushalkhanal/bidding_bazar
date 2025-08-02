@@ -1,59 +1,54 @@
+
 import 'package:bidding_bazar/features/auth/domain/entity/user_entity.dart';
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'user_api_model.g.dart';
-
-@JsonSerializable()
-class UserApiModel extends Equatable{
-  @JsonKey(name:'_id')
-  final String? userId;
-  final String username;
-  final String email;
-  final String firstName;
-  final String lastName;
-  final String password;
-
-  const UserApiModel( {
-    this.userId,
-    required this.username,
-    required this.email, 
-    required this.firstName,
-    required this.lastName,
-    required this.password,
+class UserModel extends UserEntity {
+  const UserModel({
+    required super.id,
+    required super.email,
+    required super.firstName,
+    required super.lastName,
+    required super.number,
+    required super.role,
+    required super.wallet,
   });
-  const UserApiModel.empty()
-    : userId='',
-      email='',
-      username='',
-      firstName='',
-      lastName='',
-      password='';
 
-
-  factory UserApiModel.fromJson(Map<String, dynamic> json) =>
-      _$UserApiModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UserApiModelToJson(this);
-
-
-  UserEntity toEntity(){
-    return UserEntity(userId: userId,username: username, email: email, firstName: firstName, lastName: lastName, password: password);
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] ?? json['_id'], // Backend uses _id
+      email: json['email'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      number: json['number'],
+      role: json['role'],
+      wallet: json['wallet'],
+    );
   }
 
-  static UserApiModel fromEntity(UserEntity entity)=>UserApiModel(username: entity.username, email: entity.email, firstName: entity.firstName, lastName: entity.lastName, password: entity.password);
+  // Method to convert the model to a JSON map (useful for sending data)
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'number': number,
+      'role': role,
+      'wallet': wallet,
+    };
+  }
+}
 
-  static List<UserEntity> toEntityList(List<UserApiModel>model)=>
-    model.map((model)=>model.toEntity()).toList();
+// A model for the entire login response, including the token
+class LoginResponseModel {
+  final String token;
+  final UserModel user;
 
-  
-  @override
-  List<Object?> get props => [
-    userId,
-    username,
-    email,
-    firstName,
-    lastName,
-    password
-  ];
+  LoginResponseModel({required this.token, required this.user});
+
+  factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
+    return LoginResponseModel(
+      token: json['token'],
+      user: UserModel.fromJson(json['user']),
+    );
+  }
 }

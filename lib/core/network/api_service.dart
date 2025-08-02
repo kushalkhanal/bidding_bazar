@@ -1,4 +1,6 @@
 import 'package:bidding_bazar/app/constant/api_enpoints.dart';
+import 'package:bidding_bazar/app/shared_pref/token_shared_preference.dart';
+import 'package:bidding_bazar/core/network/auth_interceptor.dart';
 import 'package:bidding_bazar/core/network/dio_error_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -25,5 +27,12 @@ class ApiService {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       };
+  }
+
+  // Factory constructor to create ApiService with auth interceptor
+  factory ApiService.withAuth(Dio dio, TokenSharedPrefs tokenSharedPrefs) {
+    final apiService = ApiService(dio);
+    apiService._dio.interceptors.add(AuthInterceptor(tokenSharedPrefs));
+    return apiService;
   }
 }
