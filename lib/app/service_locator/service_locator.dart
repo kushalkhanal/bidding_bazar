@@ -88,7 +88,7 @@ void _initAuthFeature() {
   serviceLocator.registerFactory(
     () => LoginViewModel(
       loginUserUsecase: serviceLocator(),
-      authBloc: serviceLocator<AuthBloc>(),
+      // authBloc: serviceLocator<AuthBloc>(),
     ),
   );
   serviceLocator.registerFactory(

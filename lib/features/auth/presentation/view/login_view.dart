@@ -29,14 +29,17 @@ class LoginView extends StatelessWidget {
       body: BlocListener<LoginViewModel, LoginState>(
         listener: (context, state) {
           // On Success
-          if (state.loginResponse != null) {
+          if (state.loggedInUser != null) {
             showMySnackBar(
               context: context,
-              message: "Welcome back, ${state.loginResponse!.user.firstName}!",
+              message: "Welcome back, ${state.loggedInUser!.firstName}!",
               color: Colors.green, // Success color
             );
-            // Note: Navigation is now handled by AuthWrapper
-            // The AuthBloc will automatically show the authenticated screen
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const HomeView()),
+              (route) => false,
+            );
           }
           // On Error
           if (state.errorMessage != null) {
